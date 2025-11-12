@@ -18,6 +18,17 @@ int print(struct aeEventLoop *loop, long long id, void *clientData)
     return -1;
 }
 
+void beforeTime(struct aeEventLoop *loop)
+{
+    printf("[%ld]beforeTime",time(NULL));
+}
+
+
+void afterTime(struct aeEventLoop *loop)
+{
+    printf("[%ld]afterTime",time(NULL));
+}
+
 int main(void)
 {
     aeEventLoop *loop = aeCreateEventLoop(10);
@@ -27,9 +38,13 @@ int main(void)
         if (NULL != eventData)
         {
             sprintf(eventData, "Hello World %d", i);
-            aeCreateTimeEvent(loop, i*1000, print, eventData, freeClientData);
+            aeCreateTimeEvent(loop, i*2000, print, eventData, freeClientData);
         }
     }
+
+    aeSetBeforeSleepProc(loop, beforeTime);
+    aeSetAfterSleepProc(loop, afterTime);
+
     aeMain(loop);
     aeDeleteEventLoop(loop);
     return 0;

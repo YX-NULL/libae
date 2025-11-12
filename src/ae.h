@@ -109,20 +109,20 @@ typedef struct aeEventLoop {
 } aeEventLoop;
 
 /* Prototypes */
-aeEventLoop *aeCreateEventLoop(int setsize);
+aeEventLoop *aeCreateEventLoop(int setsize);/*setsize表示监控文件描述符最大数量:系统会为每个fd使用结构体维护*/
 void aeDeleteEventLoop(aeEventLoop *eventLoop);
 void aeStop(aeEventLoop *eventLoop);
-int aeCreateFileEvent(aeEventLoop *eventLoop, int fd, int mask,
+int aeCreateFileEvent(aeEventLoop *eventLoop, int fd, int mask,/*创建读或者写事件:注册回调函数*/
         aeFileProc *proc, void *clientData);
 void aeDeleteFileEvent(aeEventLoop *eventLoop, int fd, int mask);
-int aeGetFileEvents(aeEventLoop *eventLoop, int fd);
+int aeGetFileEvents(aeEventLoop *eventLoop, int fd);/*fd读写事件掩码*/
 long long aeCreateTimeEvent(aeEventLoop *eventLoop, long long milliseconds,
         aeTimeProc *proc, void *clientData,
-        aeEventFinalizerProc *finalizerProc);
+        aeEventFinalizerProc *finalizerProc);/*创建定时器: proc回调函数 clientData:回调函数传参　finalizerProc:定时器退出时回调函数*/
 int aeDeleteTimeEvent(aeEventLoop *eventLoop, long long id);
-int aeProcessEvents(aeEventLoop *eventLoop, int flags);
+int aeProcessEvents(aeEventLoop *eventLoop, int flags);/*事件处理:内部函数*/
 int aeWait(int fd, int mask, long long milliseconds);
-void aeMain(aeEventLoop *eventLoop);
+void aeMain(aeEventLoop *eventLoop);/*开始事件循环*/
 char *aeGetApiName(void);
 void aeSetBeforeSleepProc(aeEventLoop *eventLoop, aeBeforeSleepProc *beforesleep);
 void aeSetAfterSleepProc(aeEventLoop *eventLoop, aeBeforeSleepProc *aftersleep);
